@@ -40,14 +40,36 @@
   <ItemGroup>
     <Folder Include="BiblioTarApp\" />
     <Folder Include="BiblioTarApp\app\" />
+    <Folder Include="BiblioTarApp\app\blueprints\librarian\" />
+    <Folder Include="BiblioTarApp\app\blueprints\admin\" />
+    <Folder Include="BiblioTarApp\app\blueprints\user\" />
     <Folder Include="BiblioTarApp\app\main\" />
     <Folder Include="BiblioTarApp\app\models\" />
+    <Folder Include="BiblioTarApp\app\blueprints\" />
     <Folder Include="BiblioTarApp\app\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BiblioTarApp\app\blueprints\admin\routes.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\admin\schemas.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\admin\service.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\admin\__init__.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\librarian\routes.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\librarian\schemas.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\librarian\service.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\librarian\__init__.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\user\routes.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\user\schemas.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\user\service.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\user\__init__.py" />
+    <Compile Include="BiblioTarApp\app\blueprints\__init__.py" />
     <Compile Include="bibliotarApp\app\extensions.py" />
     <Compile Include="BiblioTarApp\app\main\routes.py" />
     <Compile Include="BiblioTarApp\app\main\__init__.py" />
+    <Compile Include="BiblioTarApp\app\models\book.py" />
+    <Compile Include="BiblioTarApp\app\models\borrowedBook.py" />
+    <Compile Include="BiblioTarApp\app\models\reservation.py" />
+    <Compile Include="BiblioTarApp\app\models\role.py" />
+    <Compile Include="BiblioTarApp\app\models\user.py" />
     <Compile Include="BiblioTarApp\app\models\__init__.py" />
     <Compile Include="BiblioTarApp\app\__init__.py" />
     <Compile Include="BiblioTarApp\config.py" />
