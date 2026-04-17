@@ -38,7 +38,7 @@ def login(json_data):
 
 
 @bp.put('/profile/update/<int:user_id>')
-@bp.doc(tags=["user"])
+@bp.doc(tags=["User"])
 @bp.input(UserUpdateSchema, location="json")
 def user_update_profile(user_id, json_data):
     success, response = UserService.update_profile(user_id, json_data)
@@ -83,7 +83,7 @@ def history(user_id):
     return UserService.get_history(user_id)
 
 
-@bp.patch("/borrow/extend/<int:borrow_id>")
+@bp.put("/borrow/extend/<int:borrow_id>")
 def extend(borrow_id):
     success, res = UserService.extend_borrow(borrow_id)
 
