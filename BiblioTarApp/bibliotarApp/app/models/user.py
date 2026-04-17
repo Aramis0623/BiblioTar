@@ -12,7 +12,7 @@ UserRole = Table(
 )
 
 class User(db.Model):
-    __tablename__ = "users"
+    tablename = "users"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
     email: Mapped[str] = mapped_column(String(30))
@@ -24,10 +24,3 @@ class User(db.Model):
     address : Mapped[str] = mapped_column(String(30))
 
     borrowedBooks : Mapped[List["borrowedBook"]] = relationship(back_populates="user", lazy=True)
-
-    
-
-# class UserSchemaResponse(Schema):
-#     id = fields.Integer()
-#     name = fields.String()
-#     email = fields.String()

@@ -11,7 +11,7 @@ from datetime import date
 
 
 class Book(db.Model):
-    __tablename__ = "books"
+    tablename = "books"
     id : Mapped[int] = mapped_column(primary_key=True)
     title : Mapped[str] = mapped_column(String(30))
     author : Mapped[str] = mapped_column(String(30))
@@ -24,5 +24,3 @@ class Book(db.Model):
     dateBorrowed : Mapped[date]
 
     borrowedBooks : Mapped[List["borrowedBook"]] = relationship(back_populates="book", lazy=True)
-
-

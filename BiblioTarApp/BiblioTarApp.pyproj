@@ -32,7 +32,6 @@
     <Folder Include="BiblioTarApp\app\blueprints\librarian\" />
     <Folder Include="BiblioTarApp\app\blueprints\admin\" />
     <Folder Include="BiblioTarApp\app\blueprints\user\" />
-    <Folder Include="BiblioTarApp\app\main\" />
     <Folder Include="BiblioTarApp\app\models\" />
     <Folder Include="BiblioTarApp\app\blueprints\" />
     <Folder Include="BiblioTarApp\app\templates\" />
@@ -52,8 +51,6 @@
     <Compile Include="BiblioTarApp\app\blueprints\user\__init__.py" />
     <Compile Include="BiblioTarApp\app\blueprints\__init__.py" />
     <Compile Include="bibliotarApp\app\extensions.py" />
-    <Compile Include="BiblioTarApp\app\main\routes.py" />
-    <Compile Include="BiblioTarApp\app\main\__init__.py" />
     <Compile Include="BiblioTarApp\app\models\book.py" />
     <Compile Include="BiblioTarApp\app\models\borrowedBook.py" />
     <Compile Include="BiblioTarApp\app\models\reservation.py" />

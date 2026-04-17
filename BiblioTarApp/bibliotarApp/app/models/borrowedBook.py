@@ -14,7 +14,7 @@ class StatusEnum(enum.Enum):
     FINISHED = "finished"
 
 class BorrowedBook(db.Model):
-    __tablename__ = "borrowedBooks"
+    tablename = "borrowedBooks"
     id: Mapped[int] = mapped_column(primary_key=True)
 
     user_id : Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
