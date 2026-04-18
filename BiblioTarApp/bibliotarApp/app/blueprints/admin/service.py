@@ -40,10 +40,10 @@ class AdminService:
         if "status" in request:
             book.status = request["status"]
 
-        if request["status"] in ["damaged", "lost"]:
-            book.available = False
-        elif request["status"] == "available":
-            book.available = True
+            if request["status"] in ["damaged", "lost"]:
+                book.available = False
+            elif request["status"] == "available":
+                book.available = True
 
         if "available" in request:
             book.available = request["available"]
