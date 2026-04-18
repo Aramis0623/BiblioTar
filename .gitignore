@@ -208,3 +208,10 @@ __marimo__/
 /BiblioTarApp/.vs/BiblioTarApp
 /.vs/BiblioTar/v17/DocumentLayout.json
 .vs/
+/BiblioTarApp/bibliotarApp/app.db
+/BiblioTarApp/bibliotarApp/migrations/versions
+/BiblioTarApp/bibliotarApp/app.db
+/.gitignore
+/.gitignore
+/BiblioTarApp/bibliotarApp/app.db
+/.gitignore
