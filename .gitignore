@@ -207,3 +207,6 @@ marimo/_lsp/
 __marimo__/
 /BiblioTarApp/.vs/BiblioTarApp
 /.vs/bib/v17
+/.vs
+/BiblioTarApp/bibliotarApp/migrations/versions
+*.db

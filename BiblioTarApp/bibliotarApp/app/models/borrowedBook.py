@@ -27,3 +27,4 @@ class BorrowedBook(db.Model):
     book: Mapped["Book"] = relationship("Book", back_populates="borrowed_books")
 
     status: Mapped[StatusEnum] = mapped_column(Enum(StatusEnum))
+    extend_count: Mapped[int] = mapped_column(Integer, default=0)

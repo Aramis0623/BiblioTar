@@ -143,10 +143,11 @@ class UserService:
         if not borrow:
             return False, "Not found"
 
-        if borrow.extend_count >= 2:
+        extend_count = borrow.extend_count or 0
+        if extend_count >= 2:
             return False, "Max extension reached"
 
-        borrow.extend_count += 1
+        borrow.extend_count = extend_count + 1
         db.session.commit()
 
         return True, "Extended"
