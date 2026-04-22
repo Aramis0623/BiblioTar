@@ -8,10 +8,10 @@ class Reservation(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     user_id : Mapped[int] = mapped_column(ForeignKey("users.id"))
-    user : Mapped["User"] = relationship(back_populates="reservations")
+    user: Mapped["User"] = relationship("User", back_populates="reservations")
 
     book_id : Mapped[int] = mapped_column(ForeignKey("books.id"))
-    book : Mapped["Book"] = relationship(back_populates="reservations")
+    book: Mapped["Book"] = relationship("Book", back_populates="reservations")
 
 
 

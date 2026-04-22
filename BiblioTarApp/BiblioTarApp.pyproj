@@ -22,17 +22,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Interpreter Include="env\">
-      <Id>env</Id>
-      <Version>0.0</Version>
-      <Description>env (Python 3.14 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="BiblioTarApp\.flaskenv" />
     <Content Include="BiblioTarApp\app\templates\index.html" />
     <Content Include="requirements.txt" />
@@ -43,7 +32,6 @@
     <Folder Include="BiblioTarApp\app\blueprints\librarian\" />
     <Folder Include="BiblioTarApp\app\blueprints\admin\" />
     <Folder Include="BiblioTarApp\app\blueprints\user\" />
-    <Folder Include="BiblioTarApp\app\main\" />
     <Folder Include="BiblioTarApp\app\models\" />
     <Folder Include="BiblioTarApp\app\blueprints\" />
     <Folder Include="BiblioTarApp\app\templates\" />
@@ -63,8 +51,6 @@
     <Compile Include="BiblioTarApp\app\blueprints\user\__init__.py" />
     <Compile Include="BiblioTarApp\app\blueprints\__init__.py" />
     <Compile Include="bibliotarApp\app\extensions.py" />
-    <Compile Include="BiblioTarApp\app\main\routes.py" />
-    <Compile Include="BiblioTarApp\app\main\__init__.py" />
     <Compile Include="BiblioTarApp\app\models\book.py" />
     <Compile Include="BiblioTarApp\app\models\borrowedBook.py" />
     <Compile Include="BiblioTarApp\app\models\reservation.py" />
@@ -74,6 +60,17 @@
     <Compile Include="BiblioTarApp\app\__init__.py" />
     <Compile Include="BiblioTarApp\config.py" />
     <Compile Include="bibliotarApp\run_app.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="env\">
+      <Id>env</Id>
+      <Version>3.14</Version>
+      <Description>env (Python 3.14 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
