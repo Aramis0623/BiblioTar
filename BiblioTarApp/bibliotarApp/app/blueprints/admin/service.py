@@ -56,6 +56,8 @@ class AdminService:
         book = db.session.get(Book, book_id)
         if not book:
             return False, "Book not found"
+        if book.borrowed_books:
+            return False, "Cannot delete book with borrow history"
 
         db.session.delete(book)
         db.session.commit()

@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 from apiflask.validators import Email
 
 
@@ -33,3 +33,17 @@ class UserUpdateSchema(Schema):
 
 class BookSearchSchema(Schema):
     query = fields.String(required=True)
+
+class BorrowExtendSchema(Schema):
+    days = fields.Integer(load_default=7, validate=validate.Range(min=1))
+
+class BorrowedBookResponseSchema(Schema):
+    id = fields.Integer()
+    user_name = fields.String()
+    book_id = fields.Integer()
+    book_title = fields.String()
+    status = fields.String()
+    dateBorrowed = fields.String(allow_none=True)
+    daysBorrowed = fields.Integer()
+    dueDate = fields.String(allow_none=True)
+    extend_count = fields.Integer()

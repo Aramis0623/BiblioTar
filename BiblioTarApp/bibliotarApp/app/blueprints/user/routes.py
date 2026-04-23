@@ -4,7 +4,9 @@ from app.blueprints.user.schemas import (
     UserRequestSchema,
     UserResponseSchema,
     UserUpdateSchema,
-    BookSearchSchema
+    BookSearchSchema,
+    BorrowExtendSchema,
+    BorrowedBookResponseSchema
 )
 from app.blueprints.user.service import UserService
 from apiflask import HTTPError
@@ -84,10 +86,12 @@ def history(user_id):
 
 
 @bp.put("/borrow/extend/<int:borrow_id>")
-def extend(borrow_id):
-    success, res = UserService.extend_borrow(borrow_id)
+@bp.input(BorrowExtendSchema)
+@bp.output(BorrowedBookResponseSchema)
+def extend(borrow_id, json_data):
+    success, res = UserService.extend_borrow(borrow_id, json_data)
 
     if success:
-        return {"message": res}, 200
+        return res, 200
 
     raise HTTPError(message=res, status_code=400)

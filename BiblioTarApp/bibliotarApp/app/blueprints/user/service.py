@@ -1,6 +1,7 @@
-﻿from app.models.user import User
+﻿from datetime import date, timedelta
+from app.models.user import User
 from app.models.book import Book
-from app.models.borrowedBook import BorrowedBook
+from app.models.borrowedBook import BorrowedBook, StatusEnum
 from app.models.reservation import Reservation
 from app.extensions import db
 from sqlalchemy import select
@@ -9,6 +10,29 @@ from app.blueprints.user.schemas import UserResponseSchema
 
 class UserService:
 
+    @staticmethod
+    def _due_date(book):
+        if not book.dateBorrowed:
+            return None
+
+        return book.dateBorrowed + timedelta(days=book.daysBorrowed)
+
+    @staticmethod
+    def _borrow_response(borrow, fine=0):
+        book = borrow.book
+        due_date = UserService._due_date(book)
+
+        return {
+            "id": borrow.id,
+            "user_name": borrow.user.name,
+            "book_id": borrow.book_id,
+            "book_title": book.title,
+            "status": borrow.status.value,
+            "dateBorrowed": book.dateBorrowed.isoformat() if book.dateBorrowed else None,
+            "daysBorrowed": book.daysBorrowed,
+            "dueDate": due_date.isoformat() if due_date else None,
+            "extend_count": borrow.extend_count or 0,
+        }
 
     @staticmethod
     def register(data):
@@ -137,17 +161,32 @@ class UserService:
 
 
     @staticmethod
-    def extend_borrow(borrow_id):
-        borrow = BorrowedBook.query.get(borrow_id)
-
+    def extend_borrow(borrow_id, data):
+        borrow = db.session.get(BorrowedBook, borrow_id)
         if not borrow:
-            return False, "Not found"
+            return False, "Borrow not found"
+
+        if borrow.status != StatusEnum.ACTIVE:
+            return False, "Only active borrows can be extended"
 
         extend_count = borrow.extend_count or 0
         if extend_count >= 2:
             return False, "Max extension reached"
 
+        due_date = UserService._due_date(borrow.book)
+        if due_date and date.today() > due_date:
+            borrow.status = StatusEnum.PASTDUE
+            db.session.commit()
+            return False, "Past due borrows cannot be extended"
+
+        reserved_by_other_user = Reservation.query.filter(
+            Reservation.book_id == borrow.book_id,
+            Reservation.user_id != borrow.user_id
+        ).first()
+        if reserved_by_other_user:
+            return False, "Book is reserved by another user"
+        borrow.book.daysBorrowed += data.get("days", 7)
         borrow.extend_count = extend_count + 1
         db.session.commit()
 
-        return True, "Extended"
+        return True, UserService._borrow_response(borrow)
