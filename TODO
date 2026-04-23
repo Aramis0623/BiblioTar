@@ -1,3 +1,5 @@
-book.py-ba kell egy borrowedBooks adattag
-borrowedBook-ba kell idő változó, hogy meddig lett kölcsönözve a könyv
-BorrowedBooks kisbetűre csere
+frontend
+logout -User
+automatikus pastdue borrow -fine extra
+return fine átadás/fix/valami
+user extend átrakás librarian extendre
