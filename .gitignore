@@ -210,3 +210,4 @@ __marimo__/
 /.vs
 /BiblioTarApp/bibliotarApp/migrations/versions
 *.db
+/BiblioTarApp/BiblioTarApp.pyproj
