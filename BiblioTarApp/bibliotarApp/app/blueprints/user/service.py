@@ -1,11 +1,14 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from app.models.user import User
 from app.models.book import Book
+from app.models.role import Role
 from app.models.borrowedBook import BorrowedBook, StatusEnum
 from app.models.reservation import Reservation
 from app.extensions import db
 from sqlalchemy import select
-from app.blueprints.user.schemas import UserResponseSchema
+from app.blueprints.user.schemas import RoleSchema, UserResponseSchema, PayloadSchema
+from authlib.jose import jwt
+from flask import current_app
 
 
 class UserService:
@@ -40,6 +43,11 @@ class UserService:
         if User.query.filter_by(email=data["email"]).first():
             return False, "Email already exists"
 
+        user_role = Role.query.filter_by(name="user").first()
+
+        if not user_role:
+            return False, "Default role not found"
+
         user = User(
             name=data["name"],
             email=data["email"],
@@ -49,6 +57,7 @@ class UserService:
 
         user.set_password(data["password"])
 
+        user.roles.append(user_role)
         db.session.add(user)
         db.session.commit()
 
@@ -65,9 +74,17 @@ class UserService:
 
         if not user.check_password(data["password"]):
             return False, "Wrong password"
+        user_schema = UserResponseSchema().dump(user)
+        user_schema["token"] = UserService.token_generate(user)
+        return True, user_schema
 
-        return True, user
-
+    @staticmethod
+    def token_generate(user : User):
+        payload = PayloadSchema()
+        payload.exp = int((datetime.now() + timedelta(minutes=30)).timestamp())
+        payload.user_id = user.id
+        payload.roles = RoleSchema().dump(user.roles, many=True)
+        return jwt.encode( { "alg" : "RS256"}, PayloadSchema().dump(payload), current_app.config["SECRET_KEY"]).decode()
 
     @staticmethod
     def update_profile(user_id, data):

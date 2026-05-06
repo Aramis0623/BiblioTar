@@ -29,7 +29,7 @@ class UserResponseSchema(Schema):
     phone = fields.String()
     address = fields.String()
     roles = fields.List(fields.Nested(RoleSchema))
-
+    token = fields.String()
 
 
 class UserUpdateSchema(Schema):
@@ -52,3 +52,13 @@ class BorrowedBookResponseSchema(Schema):
     daysBorrowed = fields.Integer()
     dueDate = fields.String(allow_none=True)
     extend_count = fields.Integer()
+
+
+class RoleSchema(Schema):
+    id = fields.Integer()
+    name = fields.String()
+
+class PayloadSchema(Schema):
+    user_id = fields.Integer()
+    roles = fields.List(fields.Nested(RoleSchema))
+    exp = fields.Integer()
