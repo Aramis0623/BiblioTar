@@ -65,13 +65,18 @@ class AdminService:
 
     @staticmethod
     def search_books(query):
-        books = Book.query.filter(Book.title.contains(query)).all()
+        books = Book.query.filter(
+            Book.title.contains(query) | Book.author.contains(query)
+        ).all()
 
         return [
             {
                 "id": b.id,
                 "title": b.title,
-                "author": b.author
+                "author": b.author,
+                "available": b.available,
+                "status": b.status,
+                "publishingYear": b.publishingYear
             }
             for b in books
         ]
@@ -85,7 +90,9 @@ class AdminService:
                 "id": b.id,
                 "title": b.title,
                 "author": b.author,
-                "available": b.available
+                "available": b.available,
+                "status": b.status,
+                "publishingYear": b.publishingYear
             }
             for b in books
         ]

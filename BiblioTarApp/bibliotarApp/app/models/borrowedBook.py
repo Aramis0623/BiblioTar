@@ -8,6 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import String, Integer
 from sqlalchemy import ForeignKey
 from sqlalchemy import Enum
+from datetime import date
 
 
 class StatusEnum(enum.Enum):
@@ -27,4 +28,6 @@ class BorrowedBook(db.Model):
     book: Mapped["Book"] = relationship("Book", back_populates="borrowed_books")
 
     status: Mapped[StatusEnum] = mapped_column(Enum(StatusEnum))
+    dateReturned: Mapped[Optional[date]] = mapped_column(nullable=True)
+    fine: Mapped[int] = mapped_column(Integer, default=0)
     extend_count: Mapped[int] = mapped_column(Integer, default=0)

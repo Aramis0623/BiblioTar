@@ -18,12 +18,17 @@ class UserLoginSchema(Schema):
 
 
 
+class RoleSchema(Schema):
+    id = fields.Integer()
+    name = fields.String()
+
 class UserResponseSchema(Schema):
     id = fields.Integer()
     name = fields.String()
     email = fields.String()
     phone = fields.String()
     address = fields.String()
+    roles = fields.List(fields.Nested(RoleSchema))
 
 
 

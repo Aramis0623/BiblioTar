@@ -1,4 +1,4 @@
-﻿from datetime import date, timedelta
+from datetime import date, timedelta
 from app.models.user import User
 from app.models.book import Book
 from app.models.borrowedBook import BorrowedBook, StatusEnum
@@ -18,7 +18,7 @@ class UserService:
         return book.dateBorrowed + timedelta(days=book.daysBorrowed)
 
     @staticmethod
-    def _borrow_response(borrow, fine=0):
+    def _borrow_response(borrow):
         book = borrow.book
         due_date = UserService._due_date(book)
 
@@ -32,6 +32,7 @@ class UserService:
             "daysBorrowed": book.daysBorrowed,
             "dueDate": due_date.isoformat() if due_date else None,
             "extend_count": borrow.extend_count or 0,
+            "fine": borrow.fine or 0,
         }
 
     @staticmethod
@@ -51,7 +52,7 @@ class UserService:
         db.session.add(user)
         db.session.commit()
 
-        return True, UserResponseSchema().dump(user)
+        return True, user
 
 
 
@@ -65,7 +66,7 @@ class UserService:
         if not user.check_password(data["password"]):
             return False, "Wrong password"
 
-        return True, UserResponseSchema().dump(user)
+        return True, user
 
 
     @staticmethod
@@ -96,7 +97,10 @@ class UserService:
                 "id": b.id,
                 "title": b.title,
                 "author": b.author,
-                "available": b.available
+                "available": b.available,
+                "status": b.status,
+                "publishingYear": b.publishingYear,
+                "reserved_by": b.reservations[0].user_id if b.reservations else None
             }
             for b in books
         ]
@@ -114,19 +118,27 @@ class UserService:
             "title": book.title,
             "author": book.author,
             "available": book.available,
-            "status": book.status
+            "status": book.status,
+            "publishingYear": book.publishingYear,
+            "reserved_by": book.reservations[0].user_id if book.reservations else None
         }
 
 
     @staticmethod
     def search_books(query):
-        books = Book.query.filter(Book.title.contains(query)).all()
+        books = Book.query.filter(
+            Book.title.contains(query) | Book.author.contains(query)
+        ).all()
 
         return [
             {
                 "id": b.id,
                 "title": b.title,
-                "author": b.author
+                "author": b.author,
+                "available": b.available,
+                "status": b.status,
+                "publishingYear": b.publishingYear,
+                "reserved_by": b.reservations[0].user_id if b.reservations else None
             }
             for b in books
         ]
@@ -135,28 +147,65 @@ class UserService:
 
     @staticmethod
     def reserve_book(user_id, book_id):
-        if not User.query.get(user_id) or not Book.query.get(book_id):
-            return False, "Not found"
+        user = db.session.get(User, user_id)
+        book = db.session.get(Book, book_id)
+
+        if not user or not book:
+            return False, "Nem található felhasználó vagy könyv"
+
+        if not book.available:
+            return False, "A könyv jelenleg nem foglalható"
+
+        
+        existing = Reservation.query.filter_by(user_id=user_id, book_id=book_id).first()
+        if existing:
+            return False, "Ezt a könyvet már lefoglaltad"
 
         r = Reservation(user_id=user_id, book_id=book_id)
+        
+        book.available = False
+        book.status = "reserved"
 
         db.session.add(r)
         db.session.commit()
 
-        return True, "Reserved"
+        return True, "Sikeres foglalás!"
 
 
     @staticmethod
     def get_history(user_id):
+        
         borrows = BorrowedBook.query.filter_by(user_id=user_id).all()
-
-        return [
-            {
+        history = []
+        
+        for b in borrows:
+            due_date = UserService._due_date(b.book)
+            history.append({
+                "id": b.id,
                 "book": b.book.title,
-                "status": b.status.value
-            }
-            for b in borrows
-        ]
+                "status": b.status.value,
+                "dateBorrowed": b.book.dateBorrowed.isoformat() if b.book.dateBorrowed else None,
+                "dueDate": due_date.isoformat() if due_date else None,
+                "returnDate": b.dateReturned.isoformat() if b.dateReturned else None,
+                "fine": b.fine,
+                "type": "borrow"
+            })
+
+        
+        reservations = Reservation.query.filter_by(user_id=user_id).all()
+        for r in reservations:
+            history.append({
+                "id": f"res-{r.id}",
+                "book": r.book.title,
+                "status": "reserved",
+                "dateBorrowed": None,
+                "dueDate": None,
+                "returnDate": None,
+                "fine": 0,
+                "type": "reservation"
+            })
+
+        return history
 
 
 

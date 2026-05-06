@@ -22,43 +22,43 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="BiblioTarApp\.flaskenv" />
-    <Content Include="BiblioTarApp\app\templates\index.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BiblioTarApp\" />
-    <Folder Include="BiblioTarApp\app\" />
-    <Folder Include="BiblioTarApp\app\blueprints\librarian\" />
-    <Folder Include="BiblioTarApp\app\blueprints\admin\" />
-    <Folder Include="BiblioTarApp\app\blueprints\user\" />
-    <Folder Include="BiblioTarApp\app\models\" />
-    <Folder Include="BiblioTarApp\app\blueprints\" />
-    <Folder Include="BiblioTarApp\app\templates\" />
+    <Folder Include="bibliotarApp\" />
+    <Folder Include="bibliotarApp\app\" />
+    <Folder Include="bibliotarApp\app\blueprints\" />
+    <Folder Include="bibliotarApp\app\blueprints\admin\" />
+    <Folder Include="bibliotarApp\app\blueprints\book\" />
+    <Folder Include="bibliotarApp\app\blueprints\borrowedBook\" />
+    <Folder Include="bibliotarApp\app\blueprints\librarian\" />
+    <Folder Include="bibliotarApp\app\blueprints\reservation\" />
+    <Folder Include="bibliotarApp\app\blueprints\user\" />
+    <Folder Include="bibliotarApp\app\models\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BiblioTarApp\app\blueprints\admin\routes.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\admin\schemas.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\admin\service.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\admin\__init__.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\librarian\routes.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\librarian\schemas.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\librarian\service.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\librarian\__init__.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\user\routes.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\user\schemas.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\user\service.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\user\__init__.py" />
-    <Compile Include="BiblioTarApp\app\blueprints\__init__.py" />
+    <Compile Include="bibliotarApp\app\blueprints\admin\routes.py" />
+    <Compile Include="bibliotarApp\app\blueprints\admin\schemas.py" />
+    <Compile Include="bibliotarApp\app\blueprints\admin\service.py" />
+    <Compile Include="bibliotarApp\app\blueprints\admin\__init__.py" />
+    <Compile Include="bibliotarApp\app\blueprints\librarian\routes.py" />
+    <Compile Include="bibliotarApp\app\blueprints\librarian\schemas.py" />
+    <Compile Include="bibliotarApp\app\blueprints\librarian\service.py" />
+    <Compile Include="bibliotarApp\app\blueprints\librarian\__init__.py" />
+    <Compile Include="bibliotarApp\app\blueprints\user\routes.py" />
+    <Compile Include="bibliotarApp\app\blueprints\user\schemas.py" />
+    <Compile Include="bibliotarApp\app\blueprints\user\service.py" />
+    <Compile Include="bibliotarApp\app\blueprints\user\__init__.py" />
+    <Compile Include="bibliotarApp\app\blueprints\__init__.py" />
     <Compile Include="bibliotarApp\app\extensions.py" />
-    <Compile Include="BiblioTarApp\app\models\book.py" />
-    <Compile Include="BiblioTarApp\app\models\borrowedBook.py" />
-    <Compile Include="BiblioTarApp\app\models\reservation.py" />
-    <Compile Include="BiblioTarApp\app\models\role.py" />
-    <Compile Include="BiblioTarApp\app\models\user.py" />
-    <Compile Include="BiblioTarApp\app\models\__init__.py" />
-    <Compile Include="BiblioTarApp\app\__init__.py" />
-    <Compile Include="BiblioTarApp\config.py" />
+    <Compile Include="bibliotarApp\app\models\book.py" />
+    <Compile Include="bibliotarApp\app\models\borrowedBook.py" />
+    <Compile Include="bibliotarApp\app\models\reservation.py" />
+    <Compile Include="bibliotarApp\app\models\role.py" />
+    <Compile Include="bibliotarApp\app\models\user.py" />
+    <Compile Include="bibliotarApp\app\models\__init__.py" />
+    <Compile Include="bibliotarApp\app\__init__.py" />
+    <Compile Include="bibliotarApp\config.py" />
     <Compile Include="bibliotarApp\run_app.py" />
   </ItemGroup>
   <ItemGroup>

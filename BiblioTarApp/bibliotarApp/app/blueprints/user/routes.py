@@ -33,7 +33,8 @@ def login(json_data):
     success, res = UserService.login(json_data)
 
     if success:
-        return res, 200
+        dumped = UserResponseSchema().dump(res)
+        return dumped, 200
 
     raise HTTPError(message=res, status_code=400)
 

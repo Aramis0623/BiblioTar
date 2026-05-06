@@ -19,9 +19,10 @@ class LibrarianService:
         return book.dateBorrowed + timedelta(days=book.daysBorrowed)
 
     @staticmethod
-    def _borrow_response(borrow, fine=0):
+    def _borrow_response(borrow, fine=None):
         book = borrow.book
         due_date = LibrarianService._due_date(book)
+        actual_fine = fine if fine is not None else (borrow.fine or 0)
 
         return {
             "id": borrow.id,
@@ -34,7 +35,7 @@ class LibrarianService:
             "daysBorrowed": book.daysBorrowed,
             "dueDate": due_date.isoformat() if due_date else None,
             "extend_count": borrow.extend_count or 0,
-            "fine": fine
+            "fine": actual_fine
         }
 
     @staticmethod
@@ -47,8 +48,14 @@ class LibrarianService:
         if not book:
             return False, "Book not found"
 
-        if not book.available:
+        if not book.available and book.status != "reserved":
             return False, "Book is not available"
+
+        # Ha a könyv foglalt, ellenőrizzük, hogy a foglalás ehhez a felhasználóhoz tartozik-e
+        if book.status == "reserved":
+            reservation = Reservation.query.filter_by(book_id=book.id).first()
+            if reservation and reservation.user_id != user.id:
+                return False, "A könyv másik felhasználó által van lefoglalva"
 
         borrow = BorrowedBook(
             user_id=user.id,
@@ -61,6 +68,9 @@ class LibrarianService:
         book.status = "borrowed"
         book.dateBorrowed = date.today()
         book.daysBorrowed = data.get("daysBorrowed", 14)
+
+        # Ha volt foglalás a könyvön, azt töröljük
+        Reservation.query.filter_by(book_id=book.id).delete()
 
         db.session.add(borrow)
         db.session.commit()
@@ -85,6 +95,8 @@ class LibrarianService:
             return False, "Book is past due; fine is required"
 
         borrow.status = StatusEnum.FINISHED
+        borrow.fine = fine
+        borrow.dateReturned = date.today()
         borrow.book.available = True
         borrow.book.status = "available"
 
@@ -139,6 +151,7 @@ class LibrarianService:
             return False, "Borrow is already finished"
 
         fine = data["fine"]
+        borrow.fine = fine
 
         if fine > 0:
             borrow.status = StatusEnum.PASTDUE
@@ -150,11 +163,25 @@ class LibrarianService:
     @staticmethod
     def get_borrows():
         borrows = BorrowedBook.query.all()
+        history = [LibrarianService._borrow_response(borrow) for borrow in borrows]
 
-        return [
-            LibrarianService._borrow_response(borrow)
-            for borrow in borrows
-        ]
+        reservations = Reservation.query.all()
+        for r in reservations:
+            history.append({
+                "id": f"res-{r.id}",
+                "user_id": r.user_id,
+                "user_name": r.user.name,
+                "book_id": r.book_id,
+                "book_title": r.book.title,
+                "status": "reserved",
+                "dateBorrowed": None,
+                "daysBorrowed": 0,
+                "dueDate": None,
+                "extend_count": 0,
+                "fine": 0
+            })
+
+        return history
 
     @staticmethod
     def search_books(query):
@@ -188,7 +215,30 @@ class LibrarianService:
             )
         ).all()
 
-        return [
-            LibrarianService._borrow_response(borrow)
-            for borrow in borrows
-        ]
+        history = [LibrarianService._borrow_response(borrow) for borrow in borrows]
+
+        reservations = Reservation.query.join(Reservation.book).join(Reservation.user).filter(
+            or_(
+                Book.title.contains(query),
+                Book.author.contains(query),
+                User.name.contains(query),
+                User.email.contains(query)
+            )
+        ).all()
+
+        for r in reservations:
+            history.append({
+                "id": f"res-{r.id}",
+                "user_id": r.user_id,
+                "user_name": r.user.name,
+                "book_id": r.book_id,
+                "book_title": r.book.title,
+                "status": "reserved",
+                "dateBorrowed": None,
+                "daysBorrowed": 0,
+                "dueDate": None,
+                "extend_count": 0,
+                "fine": 0
+            })
+
+        return history
