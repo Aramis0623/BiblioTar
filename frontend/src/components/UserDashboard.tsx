@@ -170,7 +170,15 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onLogout, user }) => {
                       background: book.available ? 'rgba(34, 197, 94, 0.15)' : (book.status === 'reserved' ? 'rgba(251, 191, 36, 0.15)' : 'rgba(239, 68, 68, 0.15)'),
                       color: book.available ? '#22c55e' : (book.status === 'reserved' ? '#fbbf24' : '#ef4444'),
                     }}>
-                      {book.available ? 'Elérhető' : (book.status === 'reserved' ? (book.reserved_by === user.id ? 'Foglalt' : 'Foglalt (Saját)') : (book.status === 'borrowed' ? 'Kölcsönözve' : 'Nem elérhető'))}
+                      {book.available ? (
+                      'Elérhető'
+                    ) : (
+                      book.status === 'reserved' ? (
+                        'Foglalt'
+                      ) : (
+                        book.status === 'borrowed' ? 'Kölcsönözve' : 'Nem elérhető'
+                      )
+                    )}
                     </span>
                     <button style={{
                       width: '100%',
